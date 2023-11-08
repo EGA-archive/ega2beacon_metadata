@@ -30,8 +30,14 @@ def connection_plsql(cfg):
 """" Get metadata from PLSQL """
 
 
-def get_metadata_egapro(conn_plsql, study):
-    return False
+def get_metadata_egapro(conn_plsql):
+    cursor = conn_plsql.cursor()
+    sql = """select ebi_xml
+        from analysis_table at
+        where ega_stable_id = 'EGAZ00001450756'"""
+    cursor.execute(sql)
+    records = cursor.fetchall()
+    return records
 
 
 """ Write metadata Beacon friendly format  """
@@ -47,15 +53,21 @@ def write_metadata_beacon():
 def convert_ega_beacon_metadata():
     return False
 
+def parse_xml_analysis(xml):
+    return False
+
 
 def ega2beacon():
     conn_plsql = None
     try:
         conn_plsql = connection_plsql(cfg)
         if conn_plsql:
-            res = get_metadata_egapro(conn_plsql)
+            xml = get_metadata_egapro(conn_plsql)
+            parse_xml_analysis(xml)
     except Exception as e:
         print(e)
+
+
 
 
 """ READ CONFIG FILE """
